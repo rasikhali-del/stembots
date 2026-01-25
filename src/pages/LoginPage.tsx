@@ -99,19 +99,39 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      </div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="w-full max-w-md"
+        className="w-full max-w-md relative z-10"
       >
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold gradient-text mb-2">Stembots</h1>
-          <p className="text-muted-foreground">Welcome to STEM Education Platform</p>
+          <motion.h1 
+            className="text-4xl font-bold gradient-text mb-2"
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            Stembots
+          </motion.h1>
+          <motion.p 
+            className="text-muted-foreground"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            Welcome to STEM Education Platform
+          </motion.p>
         </div>
 
-        <Card>
+        <Card className="bg-card/50 backdrop-blur-sm border-border/50">
           <CardHeader>
             <CardTitle>Account Access</CardTitle>
             <CardDescription>Login or create a new account</CardDescription>
@@ -133,7 +153,7 @@ export default function LoginPage() {
                         <FormItem>
                           <FormLabel>Username</FormLabel>
                           <FormControl>
-                            <Input placeholder="Enter your username" {...field} />
+                            <Input placeholder="Enter your username" {...field} className="bg-background/50" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -147,16 +167,21 @@ export default function LoginPage() {
                         <FormItem>
                           <FormLabel>Password</FormLabel>
                           <FormControl>
-                            <Input type="password" placeholder="Enter your password" {...field} />
+                            <Input type="password" placeholder="Enter your password" {...field} className="bg-background/50" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
 
-                    <Button type="submit" className="w-full" disabled={isLoading}>
-                      {isLoading ? 'Logging in...' : 'Login'}
-                    </Button>
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <Button type="submit" className="w-full" disabled={isLoading}>
+                        {isLoading ? 'Logging in...' : 'Login'}
+                      </Button>
+                    </motion.div>
                   </form>
                 </Form>
               </TabsContent>
@@ -171,7 +196,7 @@ export default function LoginPage() {
                         <FormItem>
                           <FormLabel>Username</FormLabel>
                           <FormControl>
-                            <Input placeholder="Choose a username" {...field} />
+                            <Input placeholder="Choose a username" {...field} className="bg-background/50" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -185,16 +210,21 @@ export default function LoginPage() {
                         <FormItem>
                           <FormLabel>Password</FormLabel>
                           <FormControl>
-                            <Input type="password" placeholder="Choose a password" {...field} />
+                            <Input type="password" placeholder="Choose a password" {...field} className="bg-background/50" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
 
-                    <Button type="submit" className="w-full" disabled={isLoading}>
-                      {isLoading ? 'Creating account...' : 'Sign Up'}
-                    </Button>
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <Button type="submit" className="w-full" disabled={isLoading}>
+                        {isLoading ? 'Creating account...' : 'Sign Up'}
+                      </Button>
+                    </motion.div>
 
                     <p className="text-xs text-muted-foreground text-center">
                       Note: The first user to register will automatically become an admin.
