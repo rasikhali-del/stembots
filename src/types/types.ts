@@ -1,10 +1,3 @@
-export interface Option {
-  label: string;
-  value: string;
-  icon?: React.ComponentType<{ className?: string }>;
-  withCount?: boolean;
-}
-
 export type UserRole = 'user' | 'admin';
 
 export interface Profile {
@@ -41,4 +34,3 @@ export interface HomepageContent {
   content: string;
   updated_at: string;
 }
-
