@@ -27,6 +27,9 @@
   - [x] Update App.tsx with AuthProvider and RouteGuard
   - [x] Search and add images
   - [x] Run lint and fix issues
+- [x] Step 6: Enhancement Updates (Completed)
+  - [x] Add professional background image to Home page hero section
+  - [x] Implement WhatsApp redirect on Courses page
 
 ## Notes
 - Using Supabase instead of MongoDB for backend
@@ -36,6 +39,20 @@
 - Education-focused color scheme implemented with vibrant blue, purple, and cyan
 - All course images added successfully
 - All lint checks passed successfully
+
+## Latest Updates
+✅ Home Page Background:
+- Added high-quality education/creative background image to hero section
+- Implemented dark gradient overlay (95% to 85% opacity) for text readability
+- Image optimized with eager loading for hero section
+- Text color adjusted to foreground for better contrast
+
+✅ WhatsApp Integration:
+- Course cards now clickable and redirect to WhatsApp
+- "Enroll Now" button (previously "Learn More") opens WhatsApp chat
+- Message format includes: Course name, STEMBOTS branding, enrollment inquiry
+- Works on both desktop and mobile devices
+- Opens in new tab/window for better UX
 
 ## Completion Summary
 ✅ All features implemented successfully:
@@ -47,4 +64,6 @@
 - Education-focused color theme
 - Database with RLS policies
 - Image integration for all courses
+- Professional hero background with overlay
+- WhatsApp enrollment integration
 

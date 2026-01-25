@@ -49,8 +49,19 @@ export default function HomePage() {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 py-20 xl:py-32">
-        <div className="container mx-auto px-4">
+      <section className="relative overflow-hidden py-20 xl:py-32">
+        {/* Background Image with Overlay */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://miaoda-site-img.s3cdn.medo.dev/images/99ba302c-ba74-4636-8086-6fc9ab4d861f.jpg"
+            alt="STEM Education Background"
+            className="w-full h-full object-cover"
+            loading="eager"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-background/95 via-background/90 to-background/85"></div>
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -60,7 +71,7 @@ export default function HomePage() {
             <h1 className="text-4xl xl:text-6xl font-bold mb-6 gradient-text">
               {content.hero_title || 'Empowering Young Minds Through STEM Education'}
             </h1>
-            <p className="text-lg xl:text-xl text-muted-foreground mb-8">
+            <p className="text-lg xl:text-xl text-foreground mb-8">
               {content.hero_subtitle || 'Discover the exciting world of Science, Technology, Engineering, and Mathematics through hands-on learning and innovative programs.'}
             </p>
             <div className="flex flex-col xl:flex-row gap-4 justify-center">

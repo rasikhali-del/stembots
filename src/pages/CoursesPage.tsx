@@ -15,6 +15,13 @@ export default function CoursesPage() {
 
   const categories = ['All', 'Robotics', 'Coding', 'AI', 'STEM'];
 
+  // Function to handle WhatsApp redirect
+  const handleEnrollClick = (course: Course) => {
+    const message = `Hello! I'm interested in enrolling in the *${course.title}* course from *STEMBOTS*. I would like to learn more about this program.`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   useEffect(() => {
     const loadCourses = async () => {
       try {
@@ -104,7 +111,10 @@ export default function CoursesPage() {
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
               >
-                <Card className="h-full hover:shadow-hover transition-all duration-300 hover:-translate-y-1">
+                <Card 
+                  className="h-full hover:shadow-hover transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+                  onClick={() => handleEnrollClick(course)}
+                >
                   {course.image_url && (
                     <div className="aspect-video w-full overflow-hidden rounded-t-lg">
                       <img
@@ -128,8 +138,15 @@ export default function CoursesPage() {
                       <span className="text-sm text-muted-foreground">
                         Age: {course.age_group}
                       </span>
-                      <Button size="sm" variant="outline">
-                        Learn More
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEnrollClick(course);
+                        }}
+                      >
+                        Enroll Now
                       </Button>
                     </div>
                   </CardContent>
