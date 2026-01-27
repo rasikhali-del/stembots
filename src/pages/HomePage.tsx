@@ -84,15 +84,7 @@ export default function HomePage() {
           className="absolute inset-0 z-0"
           style={{ y: heroY, opacity: heroOpacity }}
         >
-          <img
-            src="/images/images.jpg" 
-            alt="STEM Education Background"
-            className="w-full h-full object-cover"
-            loading="eager"
-            onError={(e) => {
-              e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22800%22 height=%22600%22%3E%3Crect fill=%22%23111827%22 width=%22800%22 height=%22600%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2224%22 fill=%22%23666%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22%3EBackground Image%3C/text%3E%3C/svg%3E';
-            }}
-          />
+          
           <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/50"></div>
           
           {/* Animated grid overlay */}
