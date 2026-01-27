@@ -121,6 +121,7 @@ export default function AboutPage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
+          className="mb-16"
         >
           <h2 className="text-3xl font-bold text-center mb-8">Our Values</h2>
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 max-w-5xl mx-auto">
@@ -146,6 +147,144 @@ export default function AboutPage() {
                 </Card>
               </motion.div>
             ))}
+          </div>
+        </motion.div>
+
+        {/* Leadership/Founders Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="mb-16"
+        >
+          <h2 className="text-3xl font-bold text-center mb-12">Meet Our Team</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            {/* Founder 1 */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+            >
+              <Card className="h-full overflow-hidden hover:shadow-hover transition-shadow duration-300">
+                <div className="aspect-square w-full bg-gradient-to-br from-primary/20 to-secondary/20 overflow-hidden">
+                  <img 
+                    src="/images/founder.jpg" 
+                    alt="Founder" 
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect fill=%22%23e5e7eb%22 width=%22300%22 height=%22300%22/%3E%3Ccircle cx=%22150%22 cy=%22100%22 r=%2240%22 fill=%22%23999%22/%3E%3Crect x=%22100%22 y=%22150%22 width=%22100%22 height=%2280%22 fill=%22%23999%22/%3E%3C/svg%3E';
+                    }}
+                  />
+                </div>
+                <CardHeader>
+                  <CardTitle className="text-lg">Founder & CEO</CardTitle>
+                  <p className="text-sm text-primary font-semibold mt-1">Leadership</p>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Visionary leader with passion for STEM education and innovation.
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Co-Founder */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.55 }}
+            >
+              <Card className="h-full overflow-hidden hover:shadow-hover transition-shadow duration-300">
+                <div className="aspect-square w-full bg-gradient-to-br from-primary/20 to-secondary/20 overflow-hidden">
+                  <img 
+                    src="/images/cofounder.jpg" 
+                    alt="Co-Founder" 
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect fill=%22%23e5e7eb%22 width=%22300%22 height=%22300%22/%3E%3Ccircle cx=%22150%22 cy=%22100%22 r=%2240%22 fill=%22%23999%22/%3E%3Crect x=%22100%22 y=%22150%22 width=%22100%22 height=%2280%22 fill=%22%23999%22/%3E%3C/svg%3E';
+                    }}
+                  />
+                </div>
+                <CardHeader>
+                  <CardTitle className="text-lg">Co-Founder & Director</CardTitle>
+                  <p className="text-sm text-secondary font-semibold mt-1">Curriculum</p>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Strategic innovator dedicated to accessible STEM education.
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+                        {/* Head of Arts - Khadija */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
+              <Card className="h-full overflow-hidden hover:shadow-hover transition-shadow duration-300">
+                <div className="aspect-square w-full bg-gradient-to-br from-orange-500/10 to-orange-600/10 overflow-hidden">
+                  <img 
+                    src="/images/khadija.jpg" 
+                    alt="Head of Arts - Khadija" 
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      if (e.currentTarget.parentElement) {
+                        e.currentTarget.parentElement.innerHTML = '<div class="w-full h-full flex items-center justify-center"><div class="text-6xl">🎨</div></div>';
+                      }
+                    }}
+                  />
+                </div>
+                <CardHeader>
+                  <CardTitle className="text-lg">Khadija</CardTitle>
+                  <p className="text-sm text-orange-600 font-semibold mt-1">Head of Arts</p>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Creative director bringing imagination and artistic excellence to STEM education programs.
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+                        {/* Lead Developer - Zain */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.65 }}
+            >
+              <Card className="h-full overflow-hidden hover:shadow-hover transition-shadow duration-300">
+                <div className="aspect-square w-full bg-gradient-to-br from-purple-500/10 to-purple-600/10 overflow-hidden">
+                  <img 
+                    src="/images/zain.jpg" 
+                    alt="Lead Developer - Zain" 
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      if (e.currentTarget.parentElement) {
+                        e.currentTarget.parentElement.innerHTML = '<div class="w-full h-full flex items-center justify-center"><div class="text-6xl">💻</div></div>';
+                      }
+                    }}
+                  />
+                </div>
+                <CardHeader>
+                  <CardTitle className="text-lg">Zain</CardTitle>
+                  <p className="text-sm text-purple-600 font-semibold mt-1">Lead Developer</p>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Full-stack developer passionate about coding education and building innovative solutions.
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
           </div>
         </motion.div>
       </div>

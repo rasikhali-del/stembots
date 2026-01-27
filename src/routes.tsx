@@ -2,7 +2,7 @@ import HomePage from './pages/HomePage';
 import CoursesPage from './pages/CoursesPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
-import LoginPage from './pages/LoginPage';
+import AdminLoginPage from './pages/AdminLoginPage';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminCoursesPage from './pages/AdminCoursesPage';
 import type { ReactNode } from 'react';
@@ -36,9 +36,9 @@ const routes: RouteConfig[] = [
     element: <ContactPage />
   },
   {
-    name: 'Login',
-    path: '/login',
-    element: <LoginPage />,
+    name: 'Admin Login',
+    path: '/admin-login',
+    element: <AdminLoginPage />,
     visible: false
   },
   {

@@ -14,7 +14,7 @@ export interface Course {
   title: string;
   description: string;
   age_group: string;
-  category: 'Robotics' | 'Coding' | 'AI' | 'STEM';
+  category: 'Robotics' | 'Coding' | 'AI' | 'Leadership';
   image_url: string | null;
   created_at: string;
   updated_at: string;

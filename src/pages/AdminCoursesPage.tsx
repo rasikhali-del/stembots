@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
 import { Layout } from '@/components/layouts/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,19 +9,29 @@ import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { coursesApi } from '@/db/api';
 import type { Course } from '@/types';
 import { useToast } from '@/hooks/use-toast';
-import { Pencil, Plus } from 'lucide-react';
+import { Pencil, Plus, Trash2 } from 'lucide-react';
 
 const courseSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters'),
   description: z.string().min(10, 'Description must be at least 10 characters'),
   age_group: z.string().min(1, 'Age group is required'),
-  category: z.enum(['Robotics', 'Coding', 'AI', 'STEM']),
+  category: z.enum(['Robotics', 'Coding', 'AI', 'Leadership']),
   image_url: z.string().url('Must be a valid URL').optional().or(z.literal('')),
 });
 
@@ -29,9 +40,11 @@ type CourseFormData = z.infer<typeof courseSchema>;
 export default function AdminCoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
+  const [deletingCourse, setDeletingCourse] = useState<Course | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const form = useForm<CourseFormData>({
     resolver: zodResolver(courseSchema),
@@ -45,8 +58,20 @@ export default function AdminCoursesPage() {
   });
 
   useEffect(() => {
+    // Check if admin session exists
+    const adminSession = localStorage.getItem('adminSession');
+    if (!adminSession) {
+      toast({
+        title: 'Unauthorized',
+        description: 'Please login first',
+        variant: 'destructive',
+      });
+      navigate('/admin-login');
+      return;
+    }
+
     loadCourses();
-  }, []);
+  }, [navigate, toast]);
 
   const loadCourses = async () => {
     try {
@@ -71,6 +96,26 @@ export default function AdminCoursesPage() {
       image_url: course.image_url || '',
     });
     setIsDialogOpen(true);
+  };
+
+  const handleDelete = async (course: Course) => {
+    try {
+      await coursesApi.delete(course.id);
+      setCourses(courses.filter(c => c.id !== course.id));
+      setDeletingCourse(null);
+      toast({
+        title: 'Success',
+        description: 'Course deleted successfully',
+      });
+    } catch (error) {
+      console.error('Delete error:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to delete course',
+        variant: 'destructive',
+      });
+      setDeletingCourse(null);
+    }
   };
 
   const handleCreate = () => {
@@ -214,7 +259,7 @@ export default function AdminCoursesPage() {
                               <SelectItem value="Robotics">Robotics</SelectItem>
                               <SelectItem value="Coding">Coding</SelectItem>
                               <SelectItem value="AI">AI</SelectItem>
-                              <SelectItem value="STEM">STEM</SelectItem>
+                              <SelectItem value="Leadership">Leadership</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -279,13 +324,25 @@ export default function AdminCoursesPage() {
                       <CardTitle className="text-xl mb-2">{course.title}</CardTitle>
                       <CardDescription>{course.description}</CardDescription>
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleEdit(course)}
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleEdit(course)}
+                        title="Edit course"
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setDeletingCourse(course)}
+                        className="hover:text-destructive"
+                        title="Delete course"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
                 </CardHeader>
                 <CardContent>
@@ -300,6 +357,27 @@ export default function AdminCoursesPage() {
             </motion.div>
           ))}
         </div>
+
+        {/* Delete Confirmation Dialog */}
+        <AlertDialog open={!!deletingCourse} onOpenChange={(open) => !open && setDeletingCourse(null)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Course</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete "{deletingCourse?.title}"? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => deletingCourse && handleDelete(deletingCourse)}
+                className="bg-destructive hover:bg-destructive/90"
+              >
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </Layout>
   );

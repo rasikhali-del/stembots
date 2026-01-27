@@ -31,7 +31,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const refreshProfile = async () => {
     if (!user) {
@@ -44,58 +44,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        getProfile(session.user.id).then(setProfile);
-      }
-      setLoading(false);
-    });
-    // In this function, do NOT use any await calls. Use `.then()` instead to avoid deadlocks.
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        getProfile(session.user.id).then(setProfile);
-      } else {
-        setProfile(null);
-      }
-    });
-
-    return () => subscription.unsubscribe();
+    // Skip Supabase auth initialization - using localStorage admin login instead
+    setLoading(false);
   }, []);
 
-  const signInWithUsername = async (username: string, password: string) => {
-    try {
-      const email = `${username}@miaoda.com`;
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) throw error;
-      return { error: null };
-    } catch (error) {
-      return { error: error as Error };
-    }
+  const signInWithUsername = async (_username: string, _password: string) => {
+    // Using admin login instead - return error
+    return { error: new Error('Use admin login at /admin-login') };
   };
 
-  const signUpWithUsername = async (username: string, password: string) => {
-    try {
-      const email = `${username}@miaoda.com`;
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-
-      if (error) throw error;
-      return { error: null };
-    } catch (error) {
-      return { error: error as Error };
-    }
+  const signUpWithUsername = async (_username: string, _password: string) => {
+    // Using admin login instead - return error
+    return { error: new Error('Use admin login at /admin-login') };
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
     setUser(null);
     setProfile(null);
   };

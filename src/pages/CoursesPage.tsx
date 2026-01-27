@@ -4,6 +4,7 @@ import { Layout } from '@/components/layouts/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { coursesApi } from '@/db/api';
+import { supabase } from '@/db/supabase';
 import type { Course } from '@/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Sparkles } from 'lucide-react';
@@ -14,7 +15,7 @@ export default function CoursesPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [loading, setLoading] = useState(true);
 
-  const categories = ['All', 'Robotics', 'Coding', 'AI', 'STEM'];
+  const categories = ['All', 'Robotics', 'Coding', 'AI', 'Leadership', 'Arts'];
 
   // Function to handle WhatsApp redirect
   const handleEnrollClick = (course: Course) => {
@@ -38,6 +39,34 @@ export default function CoursesPage() {
     };
 
     loadCourses();
+
+    // Set up real-time subscription to courses table
+    const subscription = supabase
+      .channel('courses-channel')
+      .on(
+        'postgres_changes',
+        {
+          event: '*', // Listen to all events (INSERT, UPDATE, DELETE)
+          schema: 'public',
+          table: 'courses'
+        },
+        async () => {
+          // Reload courses whenever there's a change
+          try {
+            const data = await coursesApi.getAll();
+            setCourses(data);
+            setFilteredCourses(data);
+          } catch (error) {
+            console.error('Failed to sync courses:', error);
+          }
+        }
+      )
+      .subscribe();
+
+    // Cleanup subscription on component unmount
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
@@ -208,7 +237,7 @@ export default function CoursesPage() {
                       </CardDescription>
                     </CardHeader>
                     
-                    <CardContent className="relative">
+                    <CardContent className="relative space-y-4">
                       <div className="flex justify-between items-center">
                         <span className="text-sm text-muted-foreground">
                           Age: {course.age_group}

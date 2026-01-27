@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, LogOut, User } from 'lucide-react';
+import { Menu, LogOut, User, MessageCircle } from 'lucide-react';
 import { useState } from 'react';
 import { motion } from 'motion/react';
 
@@ -10,6 +10,13 @@ export function Navbar() {
   const { user, profile, signOut } = useAuth();
   const location = useLocation();
   const [open, setOpen] = useState(false);
+  const whatsappNumber = '03462641229';
+
+  const handleWhatsApp = () => {
+    const message = 'Hello Stembots! I would like to know more about your courses.';
+    const whatsappUrl = `https://wa.me/${whatsappNumber.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
 
   const navLinks = [
     { href: '/', label: 'Home' },
@@ -34,14 +41,26 @@ export function Navbar() {
     >
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
-          <Link to="/" className="flex items-center space-x-2 group">
-            <motion.span 
-              className="text-2xl font-bold gradient-text"
-              whileHover={{ scale: 1.05 }}
+          <Link to="/" className="flex items-center space-x-3 group">
+            <motion.div 
+              className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-primary/5 transition-colors duration-300"
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              Stembots
-            </motion.span>
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <img 
+                  src="/images/logo/logo.jpg" 
+                  alt="Stembots Logo" 
+                  className="h-10 w-10 relative z-10 rounded-md"
+                />
+              </div>
+              <div className="flex flex-col leading-tight">
+                <span className="text-2xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">Stembots</span>
+                <span className="text-xs font-semibold text-primary/80 tracking-wider">STEM Education</span>
+              </div>
+            </motion.div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -77,6 +96,16 @@ export function Navbar() {
 
           {/* Desktop Auth Buttons */}
           <div className="hidden lg:flex items-center space-x-4">
+            <motion.button
+              onClick={handleWhatsApp}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white text-sm font-medium transition-all duration-300"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              title="Chat with us on WhatsApp"
+            >
+              <MessageCircle className="h-4 w-4" />
+              <span className="hidden sm:inline">WhatsApp</span>
+            </motion.button>
             {user ? (
               <>
                 <motion.div 
@@ -114,7 +143,7 @@ export function Navbar() {
                 whileTap={{ scale: 0.95 }}
               >
                 <Button size="sm" asChild>
-                  <Link to="/login">Login</Link>
+                  <Link to="/admin-login">Admin Login</Link>
                 </Button>
               </motion.div>
             )}
@@ -134,6 +163,18 @@ export function Navbar() {
             </SheetTrigger>
             <SheetContent side="right" className="w-64 bg-card border-border/50">
               <div className="flex flex-col space-y-4 mt-8">
+                <motion.button
+                  onClick={() => {
+                    handleWhatsApp();
+                    setOpen(false);
+                  }}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white font-medium transition-all duration-300 w-full justify-center"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  WhatsApp
+                </motion.button>
                 {navLinks.map((link, index) => (
                   <motion.div
                     key={link.href}
@@ -171,7 +212,7 @@ export function Navbar() {
                     </>
                   ) : (
                     <Button size="sm" className="w-full" asChild>
-                      <Link to="/login" onClick={() => setOpen(false)}>Login</Link>
+                      <Link to="/admin-login" onClick={() => setOpen(false)}>Admin Login</Link>
                     </Button>
                   )}
                 </div>

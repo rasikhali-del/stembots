@@ -4,7 +4,7 @@ CREATE TABLE public.courses (
   title TEXT NOT NULL,
   description TEXT NOT NULL,
   age_group TEXT NOT NULL,
-  category TEXT NOT NULL CHECK (category IN ('Robotics', 'Coding', 'AI', 'STEM')),
+  category TEXT NOT NULL CHECK (category IN ('Robotics', 'Coding', 'AI', 'Leadership')),
   image_url TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -46,15 +46,15 @@ CREATE POLICY "Admins can update homepage content" ON homepage_content
   FOR UPDATE TO authenticated USING (is_admin(auth.uid()));
 
 -- Insert sample courses
-INSERT INTO public.courses (title, description, age_group, category) VALUES
-('Introduction to Robotics', 'Learn the basics of robotics, including building and programming simple robots. Perfect for beginners!', '8-12 years', 'Robotics'),
-('Advanced Robot Programming', 'Take your robotics skills to the next level with advanced programming techniques and complex builds.', '13-17 years', 'Robotics'),
-('Python for Kids', 'Start your coding journey with Python! Learn programming fundamentals through fun projects and games.', '10-14 years', 'Coding'),
-('Web Development Basics', 'Create your own websites! Learn HTML, CSS, and JavaScript to build interactive web pages.', '12-16 years', 'Coding'),
-('Introduction to AI', 'Discover the world of Artificial Intelligence! Learn about machine learning and create your first AI project.', '14-18 years', 'AI'),
-('AI and Machine Learning', 'Dive deep into AI concepts, neural networks, and build intelligent applications.', '15-18 years', 'AI'),
-('STEM Explorer Kit', 'A comprehensive kit covering Science, Technology, Engineering, and Math through hands-on experiments.', '8-12 years', 'STEM'),
-('Electronics and Circuits', 'Learn about electricity, circuits, and build your own electronic projects with our STEM kit.', '11-15 years', 'STEM');
+INSERT INTO public.courses (title, description, age_group, category, image_url) VALUES
+('Introduction to Robotics', 'Learn the basics of robotics, including building and programming simple robots. Perfect for beginners!', '8-12 years', 'Robotics', '/images/robotics.jpg'),
+('Advanced Robot Programming', 'Take your robotics skills to the next level with advanced programming techniques and complex builds.', '13-17 years', 'Robotics', '/images/robotics.jpg'),
+('Python for Kids', 'Start your coding journey with Python! Learn programming fundamentals through fun projects and games.', '10-14 years', 'Coding', '/images/python.png'),
+('Web Development Basics', 'Create your own websites! Learn HTML, CSS, and JavaScript to build interactive web pages.', '12-16 years', 'Coding', '/images/web development.jpg'),
+('Introduction to AI', 'Discover the world of Artificial Intelligence! Learn about machine learning and create your first AI project.', '14-18 years', 'AI', '/images/AI.jpg'),
+('AI and Machine Learning', 'Dive deep into AI concepts, neural networks, and build intelligent applications.', '15-18 years', 'AI', '/images/ai.jpg'),
+('Leadership and Teamwork', 'Develop essential leadership skills through collaborative projects and team-based challenges.', '10-16 years', 'Leadership', '/images/leadership.jpg'),
+('Electronics and Circuits', 'Learn about electricity, circuits, and build your own electronic projects with our STEM kit.', '11-15 years', 'Leadership', '/images/leadership.webp');
 
 -- Insert default homepage content
 INSERT INTO public.homepage_content (section_id, content) VALUES

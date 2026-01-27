@@ -121,6 +121,19 @@ function DialogDescription({
   );
 }
 
+function VisuallyHidden({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="visually-hidden"
+      className={cn("sr-only", className)}
+      {...props}
+    />
+  );
+}
+
 export {
   Dialog,
   DialogClose,
@@ -132,4 +145,5 @@ export {
   DialogPortal,
   DialogTitle,
   DialogTrigger,
+  VisuallyHidden,
 };

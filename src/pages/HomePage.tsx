@@ -85,12 +85,12 @@ export default function HomePage() {
           style={{ y: heroY, opacity: heroOpacity }}
         >
           <img
-            src="https://miaoda-site-img.s3cdn.medo.dev/images/99ba302c-ba74-4636-8086-6fc9ab4d861f.jpg"
+            src="public/images/image.jpg"
             alt="STEM Education Background"
             className="w-full h-full object-cover"
             loading="eager"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-background/98 via-background/95 to-background/90"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/50"></div>
           
           {/* Animated grid overlay */}
           <div className="absolute inset-0 bg-[linear-gradient(rgba(33,150,243,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(33,150,243,0.03)_1px,transparent_1px)] bg-[size:50px_50px]"></div>

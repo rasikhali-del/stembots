@@ -4,11 +4,11 @@ import { Layout } from '@/components/layouts/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { contactApi, coursesApi, profilesApi } from '@/db/api';
-import type { ContactMessage, Course, Profile } from '@/types';
-import { Trash2, BookOpen, MessageSquare, Users } from 'lucide-react';
+import { contactApi, coursesApi } from '@/db/api';
+import type { ContactMessage, Course } from '@/types';
+import { Trash2, BookOpen, MessageSquare, LogOut } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,33 +24,37 @@ import {
 export default function AdminDashboard() {
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
-  const [profiles, setProfiles] = useState<Profile[]>([]);
-  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
+    // Check if admin session exists
+    const adminSession = localStorage.getItem('adminSession');
+    if (!adminSession) {
+      toast({
+        title: 'Unauthorized',
+        description: 'Please login first',
+        variant: 'destructive',
+      });
+      navigate('/admin-login');
+      return;
+    }
+
     loadData();
-  }, []);
+  }, [navigate, toast]);
 
   const loadData = async () => {
     try {
-      setLoading(true);
-      const [messagesData, coursesData, profilesData] = await Promise.all([
-        contactApi.getAll(),
-        coursesApi.getAll(),
-        profilesApi.getAll(),
-      ]);
+      const messagesData = await contactApi.getAll();
+      const coursesData = await coursesApi.getAll();
       setMessages(messagesData);
       setCourses(coursesData);
-      setProfiles(profilesData);
     } catch (error) {
       toast({
         title: 'Error',
         description: 'Failed to load data',
         variant: 'destructive',
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -71,24 +75,6 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleToggleRole = async (profile: Profile) => {
-    try {
-      const newRole = profile.role === 'admin' ? 'user' : 'admin';
-      await profilesApi.updateRole(profile.id, newRole);
-      setProfiles(profiles.map(p => p.id === profile.id ? { ...p, role: newRole } : p));
-      toast({
-        title: 'Success',
-        description: `User role updated to ${newRole}`,
-      });
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to update user role',
-        variant: 'destructive',
-      });
-    }
-  };
-
   return (
     <Layout>
       <div className="container mx-auto px-4 py-12 xl:py-16">
@@ -96,14 +82,31 @@ export default function AdminDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-8"
+          className="mb-8 flex justify-between items-start"
         >
-          <h1 className="text-4xl font-bold mb-2 gradient-text">Admin Dashboard</h1>
-          <p className="text-muted-foreground">Manage your platform content and users</p>
+          <div>
+            <h1 className="text-4xl font-bold mb-2 gradient-text">Admin Dashboard</h1>
+            <p className="text-muted-foreground">Manage your platform content and users</p>
+          </div>
+          <Button
+            variant="outline"
+            className="border-red-500/50 text-red-500 hover:bg-red-500/10"
+            onClick={() => {
+              localStorage.removeItem('adminSession');
+              toast({
+                title: 'Logged Out',
+                description: 'You have been logged out successfully',
+              });
+              navigate('/admin-login');
+            }}
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            Logout
+          </Button>
         </motion.div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Courses</CardTitle>
@@ -123,24 +126,13 @@ export default function AdminDashboard() {
               <div className="text-2xl font-bold">{messages.length}</div>
             </CardContent>
           </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Users</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{profiles.length}</div>
-            </CardContent>
-          </Card>
         </div>
 
         {/* Tabs */}
         <Tabs defaultValue="messages" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="messages">Messages</TabsTrigger>
             <TabsTrigger value="courses">Courses</TabsTrigger>
-            <TabsTrigger value="users">Users</TabsTrigger>
           </TabsList>
 
           {/* Messages Tab */}
@@ -219,38 +211,6 @@ export default function AdminDashboard() {
                 </Card>
               ))}
             </div>
-          </TabsContent>
-
-          {/* Users Tab */}
-          <TabsContent value="users" className="space-y-4">
-            {profiles.map((profile) => (
-              <Card key={profile.id}>
-                <CardHeader>
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <CardTitle className="text-lg">{profile.username}</CardTitle>
-                      <CardDescription>{profile.email}</CardDescription>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className={`px-3 py-1 rounded-md text-sm font-medium ${
-                        profile.role === 'admin' 
-                          ? 'bg-primary/10 text-primary' 
-                          : 'bg-muted text-muted-foreground'
-                      }`}>
-                        {profile.role}
-                      </span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleToggleRole(profile)}
-                      >
-                        Make {profile.role === 'admin' ? 'User' : 'Admin'}
-                      </Button>
-                    </div>
-                  </div>
-                </CardHeader>
-              </Card>
-            ))}
           </TabsContent>
         </Tabs>
       </div>

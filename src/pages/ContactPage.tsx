@@ -5,12 +5,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { contactApi } from '@/db/api';
+import { contactApi, emailApi } from '@/db/api';
 import { useToast } from '@/hooks/use-toast';
 import { Mail, MapPin, Instagram } from 'lucide-react';
 
@@ -18,6 +17,7 @@ const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
   message: z.string().min(10, 'Message must be at least 10 characters'),
+  phone: z.string().optional(),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
@@ -39,6 +39,10 @@ export default function ContactPage() {
     try {
       setIsSubmitting(true);
       await contactApi.create(data);
+      
+      // Send email notification
+      await emailApi.sendContactNotification(data.name, data.email, data.message, data.phone);
+      
       toast({
         title: 'Message sent!',
         description: 'Thank you for contacting us. We\'ll get back to you soon.',
@@ -115,6 +119,20 @@ export default function ContactPage() {
 
                     <FormField
                       control={form.control}
+                      name="phone"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Phone (Optional)</FormLabel>
+                          <FormControl>
+                            <Input type="tel" placeholder="03XX-XXXXXXX" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
                       name="message"
                       render={({ field }) => (
                         <FormItem>
@@ -181,7 +199,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold mb-1">Location</h3>
                     <p className="text-muted-foreground">
-                      Serving students worldwide through online and in-person programs
+                      NASTP Near Old Airport Rawalpindi
                     </p>
                   </div>
                 </div>
@@ -194,18 +212,12 @@ export default function ContactPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2 text-sm">
+                  
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Monday - Friday</span>
-                    <span className="font-medium">9:00 AM - 6:00 PM</span>
+                    <span className="text-muted-foreground">Saturday & Sunday</span>
+                    <span className="font-medium">9:00 AM - 3:00 PM</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Saturday</span>
-                    <span className="font-medium">10:00 AM - 4:00 PM</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Sunday</span>
-                    <span className="font-medium">Closed</span>
-                  </div>
+                  
                 </div>
               </CardContent>
             </Card>

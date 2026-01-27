@@ -1,5 +1,5 @@
 import { supabase } from './supabase';
-import type { Course, ContactMessage, HomepageContent, Profile } from '@/types';
+import type { Course, ContactMessage, HomepageContent, Profile, CourseReview } from '@/types';
 
 // Courses API
 export const coursesApi = {
@@ -143,6 +143,63 @@ export const profilesApi = {
     const { error } = await supabase
       .from('profiles')
       .update({ role, updated_at: new Date().toISOString() })
+      .eq('id', id);
+    
+    if (error) throw error;
+  }
+};
+
+// Email Service API
+export const emailApi = {
+  sendContactNotification: async (name: string, email: string, message: string, phone?: string): Promise<void> => {
+    try {
+      // Call Supabase function or external email service
+      const { error } = await supabase.functions.invoke('send-contact-email', {
+        body: {
+          name,
+          email,
+          message,
+          phone,
+          timestamp: new Date().toISOString()
+        }
+      });
+      
+      if (error) {
+        console.error('Failed to send email notification:', error);
+        // Don't throw - email is optional, contact form should still work
+      }
+    } catch (err) {
+      console.error('Email service error:', err);
+      // Silently fail - contact form should still work without email
+    }
+  }
+};
+
+// Course Reviews API
+export const reviewsApi = {
+  getByCourse: async (courseId: string): Promise<CourseReview[]> => {
+    const { data, error } = await supabase
+      .from('course_reviews')
+      .select('*')
+      .eq('course_id', courseId)
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    return Array.isArray(data) ? data : [];
+  },
+
+  create: async (review: Omit<CourseReview, 'id' | 'created_at'>): Promise<void> => {
+    const { error } = await supabase
+      .from('course_reviews')
+      .insert([review]);
+    
+    if (error) throw error;
+  },
+
+  delete: async (id: string): Promise<void> => {
+    const { error } = await supabase
+      .from('course_reviews')
+      .delete()
       .eq('id', id);
     
     if (error) throw error;
