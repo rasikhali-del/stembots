@@ -85,7 +85,7 @@ export default function HomePage() {
           style={{ y: heroY, opacity: heroOpacity }}
         >
           <img
-            src="public/images/image.jpg"
+            src="images/image.jpg"
             alt="STEM Education Background"
             className="w-full h-full object-cover"
             loading="eager"
