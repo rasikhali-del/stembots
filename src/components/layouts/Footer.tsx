@@ -73,7 +73,7 @@ export function Footer() {
           <div>
             <h3 className="text-lg font-bold gradient-text mb-4">Stembots</h3>
             <p className="text-sm text-muted-foreground">
-              Empowering young minds through innovative STEM education programs.
+              Crafting future with code, robot and art. 
             </p>
           </div>
           

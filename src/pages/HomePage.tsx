@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { motion, useScroll, useTransform } from 'motion/react';
+import { useEffect, useState, useRef } from 'react';
+import { motion, useScroll, useTransform, useInView, useMotionValueEvent } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,11 +11,27 @@ import { ArrowRight, Code, Cpu, Lightbulb, Wrench, Sparkles } from 'lucide-react
 export default function HomePage() {
   const [content, setContent] = useState<Record<string, string>>({});
   const [featuredCourses, setFeaturedCourses] = useState<Course[]>([]);
-  const { scrollYProgress } = useScroll();
+  const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('down');
+  const { scrollY, scrollYProgress } = useScroll();
+  
+  // Track scroll direction
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() ?? 0;
+    setScrollDirection(latest > previous ? 'down' : 'up');
+  });
   
   // Parallax effect for hero background
   const heroY = useTransform(scrollYProgress, [0, 0.3], [0, 100]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
+
+  // Section refs for scroll animations
+  const programsRef = useRef(null);
+  const coursesRef = useRef(null);
+  const ctaRef = useRef(null);
+  
+  const programsInView = useInView(programsRef, { once: false, margin: "-15% 0px" });
+  const coursesInView = useInView(coursesRef, { once: false, margin: "-15% 0px" });
+  const ctaInView = useInView(ctaRef, { once: false, margin: "-15% 0px" });
 
   useEffect(() => {
     const loadContent = async () => {
@@ -63,10 +79,11 @@ export default function HomePage() {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 30, scale: 0.95 },
     visible: {
       opacity: 1,
       y: 0,
+      scale: 1,
       transition: {
         type: "spring" as const,
         stiffness: 100,
@@ -80,7 +97,7 @@ export default function HomePage() {
       {/* Hero Section with Parallax */}
       <section className="relative overflow-hidden py-20 xl:py-32">
         {/* Animated Background with Parallax */}
-                <motion.div 
+        <motion.div 
           className="absolute inset-0 z-0"
           style={{ y: heroY, opacity: heroOpacity }}
         >
@@ -94,8 +111,6 @@ export default function HomePage() {
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/50"></div>
-          
-          {/* Animated grid overlay */}
           <div className="absolute inset-0 bg-[linear-gradient(rgba(33,150,243,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(33,150,243,0.03)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
         </motion.div>
 
@@ -106,8 +121,8 @@ export default function HomePage() {
               key={i}
               className="absolute w-1 h-1 bg-primary/30 rounded-full"
               initial={{ 
-                x: Math.random() * window.innerWidth, 
-                y: Math.random() * window.innerHeight,
+                x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000), 
+                y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 600),
                 scale: Math.random() * 0.5 + 0.5
               }}
               animate={{
@@ -131,14 +146,16 @@ export default function HomePage() {
             className="max-w-4xl mx-auto text-center"
           >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6"
-            >
-              <Sparkles className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Next-Gen STEM Education</span>
-            </motion.div>
+  initial={{ scale: 0.9, opacity: 0 }}
+  animate={{ scale: 1, opacity: 1 }}
+  transition={{ duration: 0.6, delay: 0.2 }}
+  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6"
+>
+  <Sparkles className="w-4 h-4 text-primary" />
+  <span className="text-sm font-medium text-primary">
+    Crafting future with code, robot and art.
+  </span>
+</motion.div>
 
             <motion.h1 
               className="text-4xl xl:text-6xl font-bold mb-6"
@@ -147,7 +164,7 @@ export default function HomePage() {
               transition={{ duration: 0.8, delay: 0.3 }}
             >
               <span className="gradient-text">
-                {content.hero_title || 'Empowering Young Minds Through STEM Education'}
+                {content.hero_title || 'Crafting future with code, robot and art.'}
               </span>
             </motion.h1>
 
@@ -189,15 +206,15 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
+      
 
-      {/* Programs Section with Stagger Animation */}
-      <section className="py-16 xl:py-24 relative">
+      {/* Programs Section with Scroll Animation */}
+      <section ref={programsRef} className="py-16 xl:py-24 relative overflow-hidden">
         <div className="container mx-auto px-4">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, y: 40 }}
+            animate={programsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: scrollDirection === 'down' ? 40 : -40 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="text-center mb-12"
           >
             <h2 className="text-3xl xl:text-4xl font-bold mb-4 gradient-text">Our Programs</h2>
@@ -210,10 +227,9 @@ export default function HomePage() {
             className="grid grid-cols-1 xl:grid-cols-2 @4xl:grid-cols-4 gap-6"
             variants={containerVariants}
             initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            animate={programsInView ? "visible" : "hidden"}
           >
-            {programs.map((program, index) => (
+            {programs.map((program) => (
               <motion.div
                 key={program.title}
                 variants={itemVariants}
@@ -241,14 +257,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Featured Courses Section */}
-      <section className="py-16 xl:py-24 bg-card/30 relative">
+      {/* Featured Courses Section with Scroll Animation */}
+      <section ref={coursesRef} className="py-16 xl:py-24 bg-card/30 relative overflow-hidden">
         <div className="container mx-auto px-4">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, y: 40 }}
+            animate={coursesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: scrollDirection === 'down' ? 40 : -40 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="text-center mb-12"
           >
             <h2 className="text-3xl xl:text-4xl font-bold mb-4 gradient-text">Featured Courses</h2>
@@ -261,10 +276,9 @@ export default function HomePage() {
             className="grid grid-cols-1 xl:grid-cols-2 @4xl:grid-cols-4 gap-6 mb-8"
             variants={containerVariants}
             initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            animate={coursesInView ? "visible" : "hidden"}
           >
-            {featuredCourses.map((course, index) => (
+            {featuredCourses.map((course) => (
               <motion.div
                 key={course.id}
                 variants={itemVariants}
@@ -305,8 +319,7 @@ export default function HomePage() {
           <motion.div 
             className="text-center"
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            animate={coursesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             <motion.div
@@ -321,40 +334,23 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 xl:py-24 relative overflow-hidden">
+      {/* CTA Section with Scroll Animation */}
+      <section ref={ctaRef} className="py-16 xl:py-24 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10"></div>
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, scale: 0.9, y: 40 }}
+            animate={ctaInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.9, y: scrollDirection === 'down' ? 40 : -40 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="max-w-3xl mx-auto text-center bg-card/50 backdrop-blur-sm rounded-lg p-8 xl:p-12 border border-border/50"
           >
-            <motion.h2 
-              className="text-3xl xl:text-4xl font-bold mb-4 gradient-text"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
+            <h2 className="text-3xl xl:text-4xl font-bold mb-4 gradient-text">
               Ready to Start Learning?
-            </motion.h2>
-            <motion.p 
-              className="text-muted-foreground mb-8"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
+            </h2>
+            <p className="text-muted-foreground mb-8">
               Join thousands of students already learning with Stembots
-            </motion.p>
+            </p>
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.4 }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -365,6 +361,90 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
+
+
+{/* Stembots for Institutions Section */}
+<section className="py-16 xl:py-24 bg-card/30">
+  <div className="container mx-auto px-4">
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      className="max-w-2xl mx-auto text-center mb-10"
+    >
+      <h2 className="text-3xl xl:text-4xl font-bold mb-4 gradient-text">
+        Stembots for Institutions
+      </h2>
+      <p className="text-muted-foreground mb-4">
+        Bring our 2-month Summer/Winter STEM Camps to your school or academy! <br />
+        Perfect for institutions looking to inspire students with hands-on robotics, coding, and AI activities.
+      </p>
+    </motion.div>
+    <motion.form
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay: 0.2 }}
+      className="max-w-xl mx-auto bg-white dark:bg-card rounded-lg shadow p-8 space-y-6 border border-border/50"
+      onSubmit={e => { e.preventDefault(); /* handle submit here */ }}
+    >
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block mb-1 font-medium">Institution Name</label>
+          <input
+            type="text"
+            name="institution"
+            required
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
+            placeholder="School/Academy Name"
+          />
+        </div>
+        <div>
+          <label className="block mb-1 font-medium">Focal Person</label>
+          <input
+            type="text"
+            name="focalPerson"
+            required
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
+            placeholder="Contact Person Name"
+          />
+        </div>
+        <div>
+          <label className="block mb-1 font-medium">Email</label>
+          <input
+            type="email"
+            name="email"
+            required
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
+            placeholder="contact@email.com"
+          />
+        </div>
+        <div>
+          <label className="block mb-1 font-medium">Contact Number</label>
+          <input
+            type="tel"
+            name="contact"
+            required
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
+            placeholder="03XX-XXXXXXX"
+          />
+        </div>
+      </div>
+      <div>
+        <label className="block mb-1 font-medium">Message (Optional)</label>
+        <textarea
+          name="message"
+          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring min-h-24"
+          placeholder="Any specific requirements or questions?"
+        />
+      </div>
+      <Button type="submit" className="w-full">
+        Submit Inquiry
+      </Button>
+    </motion.form>
+  </div>
+</section>
     </Layout>
   );
 }

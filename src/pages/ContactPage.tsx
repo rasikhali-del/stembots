@@ -175,7 +175,7 @@ export default function ContactPage() {
                   <Mail className="h-6 w-6 text-primary mt-1" />
                   <div>
                     <h3 className="font-semibold mb-1">Email</h3>
-                    <p className="text-muted-foreground">info@stembots.com</p>
+                    <p className="text-muted-foreground">info@stembots.com.pk</p>
                   </div>
                 </div>
 
@@ -194,21 +194,13 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <MapPin className="h-6 w-6 text-primary mt-1" />
-                  <div>
-                    <h3 className="font-semibold mb-1">Location</h3>
-                    <p className="text-muted-foreground">
-                      NASTP Near Old Airport Rawalpindi
-                    </p>
-                  </div>
-                </div>
+                
               </CardContent>
             </Card>
 
             <Card className="bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10">
               <CardHeader>
-                <CardTitle>Office Hours</CardTitle>
+                <CardTitle>Classes only on weekends</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2 text-sm">
