@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { homepageApi } from '@/db/api';
 import type { HomepageContent } from '@/types';
 import { Target, Eye, Users } from 'lucide-react';
+import { ScrollAnimation } from '@/components/common/ScrollAnimation';
 
 export default function AboutPage() {
   const [content, setContent] = useState<Record<string, string>>({});
@@ -29,26 +30,15 @@ export default function AboutPage() {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-12 xl:py-16">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
+        <ScrollAnimation animation="slideUp" className="text-center mb-12">
           <h1 className="text-4xl xl:text-5xl font-bold mb-4 gradient-text">About Stembots</h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Inspiring the next generation of innovators and problem solvers
           </p>
-        </motion.div>
+        </ScrollAnimation>
 
         {/* Mission Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
-        >
+        <ScrollAnimation animation="slideUp" className="mb-16">
           <Card className="max-w-4xl mx-auto">
             <CardHeader>
               <div className="flex items-center gap-3 mb-2">
@@ -62,16 +52,10 @@ export default function AboutPage() {
               </p>
             </CardContent>
           </Card>
-        </motion.div>
+        </ScrollAnimation>
 
         {/* Vision Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="mb-16"
-        >
+        <ScrollAnimation animation="slideUp" className="mb-16">
           <Card className="max-w-4xl mx-auto">
             <CardHeader>
               <div className="flex items-center gap-3 mb-2">
@@ -85,16 +69,10 @@ export default function AboutPage() {
               </p>
             </CardContent>
           </Card>
-        </motion.div>
+        </ScrollAnimation>
 
         {/* Why STEM Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-16"
-        >
+        <ScrollAnimation animation="slideUp" className="mb-16">
           <Card className="max-w-4xl mx-auto">
             <CardHeader>
               <div className="flex items-center gap-3 mb-2">
@@ -113,16 +91,10 @@ export default function AboutPage() {
               </div>
             </CardContent>
           </Card>
-        </motion.div>
+        </ScrollAnimation>
 
         {/* Values Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mb-16"
-        >
+        <ScrollAnimation animation="slideUp" className="mb-16">
           <h2 className="text-3xl font-bold text-center mb-8">Our Values</h2>
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {[
@@ -130,13 +102,7 @@ export default function AboutPage() {
               { title: 'Excellence', description: 'We strive for excellence in everything we do, from curriculum design to student support.' },
               { title: 'Inclusivity', description: 'We believe STEM education should be accessible to all students, regardless of background.' },
             ].map((value, index) => (
-              <motion.div
-                key={value.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.1 * index }}
-              >
+              <ScrollAnimation key={value.title} animation="slideUp" delay={0.1 * index}>
                 <Card className="h-full text-center hover:shadow-hover transition-shadow duration-300">
                   <CardHeader>
                     <CardTitle className="text-xl">{value.title}</CardTitle>
@@ -145,10 +111,10 @@ export default function AboutPage() {
                     <p className="text-muted-foreground">{value.description}</p>
                   </CardContent>
                 </Card>
-              </motion.div>
+              </ScrollAnimation>
             ))}
           </div>
-        </motion.div>
+        </ScrollAnimation>
 
         {/* Leadership/Founders Section */}
         <motion.div
