@@ -34,7 +34,7 @@ export function Navbar() {
 
   return (
     <motion.nav 
-      className="sticky top-0 z-50 w-full border-b bg-white :bg-slate-900 border-orange-200 dark:border-slate-800 shadow-md transition-all duration-300"
+      className="sticky top-0 z-50 w-full border-b bg-white border-orange-200 shadow-md transition-all duration-300"
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
@@ -163,20 +163,20 @@ export function Navbar() {
             {user ? (
               <>
                 <motion.div 
-                  className="flex items-center space-x-2 text-sm px-3 py-1.5 rounded-full bg-orange-100 dark:bg-orange-900/30 border border-orange-300 dark:border-orange-700"
+                  className="flex items-center space-x-2 text-sm px-3 py-1.5 rounded-full bg-orange-100 border border-orange-300"
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <User className="h-4 w-4 text-orange-600 dark:text-orange-400" />
-                  <span className="text-slate-900 dark:text-white">{profile?.username}</span>
+                  <User className="h-4 w-4 text-orange-600" />
+                  <span className="text-slate-900">{profile?.username}</span>
                 </motion.div>
                 {profile?.role === 'admin' && (
                   <motion.div
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <Button variant="outline" size="sm" asChild className="border-orange-300 dark:border-orange-700 text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/30">
+                    <Button variant="outline" size="sm" asChild className="border-orange-300 text-orange-600 hover:bg-orange-50">
                       <Link to="/admin">Admin</Link>
                     </Button>
                   </motion.div>
@@ -210,12 +210,12 @@ export function Navbar() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" className="text-slate-900 border border-orange-300">
                   <Menu className="h-6 w-6" />
                 </Button>
               </motion.div>
             </SheetTrigger>
-            <SheetContent side="right" className="w-64 bg-white dark:bg-slate-900 border-orange-200 dark:border-slate-800">
+            <SheetContent side="right" className="w-64 bg-white border-orange-200">
               <div className="flex flex-col space-y-4 mt-8">
                 <motion.button
                   onClick={() => {
@@ -244,23 +244,23 @@ export function Navbar() {
                     <Link
                       to={link.href}
                       onClick={() => setOpen(false)}
-                      className={`text-base font-medium transition-colors hover:text-orange-600 dark:hover:text-orange-400 block ${
-                        isActive(link.href) ? 'text-orange-600 dark:text-orange-400' : 'text-slate-700 dark:text-slate-300'
+                      className={`text-base font-medium transition-colors hover:text-orange-600 block ${
+                        isActive(link.href) ? 'text-orange-600' : 'text-slate-700'
                       }`}
                     >
                       {link.label}
                     </Link>
                   </motion.div>
                 ))}
-                <div className="border-t border-orange-200 dark:border-slate-800 pt-4">
+                <div className="border-t border-orange-200 pt-4">
                   {user ? (
                     <>
-                      <div className="flex items-center space-x-2 text-sm mb-4 px-3 py-2 rounded-lg bg-orange-100 dark:bg-orange-900/30 border border-orange-300 dark:border-orange-700">
-                        <User className="h-4 w-4 text-orange-600 dark:text-orange-400" />
-                        <span className="text-slate-900 dark:text-white">{profile?.username}</span>
+                      <div className="flex items-center space-x-2 text-sm mb-4 px-3 py-2 rounded-lg bg-orange-100 border border-orange-300">
+                        <User className="h-4 w-4 text-orange-600" />
+                        <span className="text-slate-900">{profile?.username}</span>
                       </div>
                       {profile?.role === 'admin' && (
-                        <Button variant="outline" size="sm" className="w-full mb-2 border-orange-300 dark:border-orange-700 text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/30" asChild>
+                        <Button variant="outline" size="sm" className="w-full mb-2 border-orange-300 text-orange-600 hover:bg-orange-50" asChild>
                           <Link to="/admin" onClick={() => setOpen(false)}>Admin</Link>
                         </Button>
                       )}
