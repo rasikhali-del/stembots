@@ -34,31 +34,66 @@ export function Navbar() {
 
   return (
     <motion.nav 
-      className="sticky top-0 z-50 w-full border-b border-border/50 backdrop-blur-glass"
+      className="sticky top-0 z-50 w-full border-b bg-white :bg-slate-900 border-orange-200 dark:border-slate-800 shadow-md transition-all duration-300"
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
     >
+      {/* Animated top border gradient */}
+      <motion.div 
+        className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary via-secondary via-accent to-primary"
+        animate={{ backgroundPosition: ['0% center', '200% center'] }}
+        transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+        style={{ backgroundSize: '200% 100%' }}
+      />
+
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
-          <Link to="/" className="flex items-center space-x-3 group">
+          <Link to="/" className="flex items-center space-x-3 group relative">
             <motion.div 
-              className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-primary/5 transition-colors duration-300"
+              className="flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors duration-300 relative"
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
+              {/* Logo glow effect */}
+              <motion.div 
+                className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary/30 via-secondary/20 to-accent/30 blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+              
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-br from-primary to-secondary rounded-lg blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  animate={{ rotate: [0, 360] }}
+                  transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+                />
                 <img 
-                  src="/images/logo/logo.jpg" 
+                  src="/logo-P.png" 
                   alt="Stembots Logo" 
-                  className="h-10 w-10 relative z-10 rounded-md"
+                  className="h-10 w-10 relative z-10 rounded-md object-cover"
                 />
               </div>
+
               <div className="flex flex-col leading-tight">
-                <span className="text-2xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">Stembots</span>
-                <span className="text-xs font-semibold text-primary/80 tracking-wider">STEM Education</span>
+                <div className="text-2xl font-bold flex gap-0.5">
+                  <motion.span className="text-pink-500" animate={{ y: [0, -2, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0 }}>S</motion.span>
+                  <motion.span className="text-blue-900" animate={{ y: [0, -2, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0.1 }}>T</motion.span>
+                  <motion.span className="text-teal-500" animate={{ y: [0, -2, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0.2 }}>E</motion.span>
+                  <motion.span className="text-yellow-400" animate={{ y: [0, -2, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}>M</motion.span>
+                  <motion.span className="text-blue-900" animate={{ y: [0, -2, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0.4 }}>B</motion.span>
+                  <motion.span className="text-blue-900" animate={{ y: [0, -2, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}>O</motion.span>
+                  <motion.span className="text-blue-900" animate={{ y: [0, -2, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0.6 }}>T</motion.span>
+                  <motion.span className="text-blue-900" animate={{ y: [0, -2, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0.7 }}>S</motion.span>
+                </div>
+                <motion.span 
+                  className="text-xs font-semibold text-primary/80 tracking-wider"
+                  animate={{ color: ['hsl(39, 100%, 50%)', 'hsl(320, 100%, 60%)', 'hsl(39, 100%, 50%)'] }}
+                  transition={{ duration: 4, repeat: Infinity }}
+                >
+                
+                </motion.span>
               </div>
             </motion.div>
           </Link>
@@ -74,20 +109,32 @@ export function Navbar() {
               >
                 <Link
                   to={link.href}
-                  className={`text-sm font-medium transition-all duration-300 relative group ${
-                    isActive(link.href) ? 'text-primary' : 'text-foreground/80 hover:text-primary'
+                  className={`text-sm font-medium transition-all duration-300 relative group px-3 py-2 rounded-md ${
+                    isActive(link.href) ? 'text-orange-600' : 'text-black hover:text-orange-600'
                   }`}
                 >
+                  {/* Background glow on hover */}
+                  <motion.div 
+                    className="absolute inset-0 rounded-md bg-gradient-to-r from-primary/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"
+                    initial={{ scale: 0.8 }}
+                    whileHover={{ scale: 1 }}
+                  />
+                  
                   {link.label}
+                  
                   {isActive(link.href) && (
                     <motion.div
-                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary"
+                      className="absolute -bottom-1 left-3 right-3 h-0.5 bg-gradient-to-r from-orange-500 to-yellow-500"
                       layoutId="navbar-indicator"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
                   {!isActive(link.href) && (
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
+                    <motion.span 
+                      className="absolute -bottom-1 left-3 h-0.5 bg-gradient-to-r from-orange-500 to-yellow-500 group-hover:right-3 transition-all duration-300"
+                      initial={{ width: 0 }}
+                      whileHover={{ width: 'calc(100% - 24px)' }}
+                    />
                   )}
                 </Link>
               </motion.div>
@@ -98,31 +145,38 @@ export function Navbar() {
           <div className="hidden lg:flex items-center space-x-4">
             <motion.button
               onClick={handleWhatsApp}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white text-sm font-medium transition-all duration-300"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white text-sm font-medium transition-all duration-300 relative overflow-hidden group"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               title="Chat with us on WhatsApp"
             >
-              <MessageCircle className="h-4 w-4" />
-              <span className="hidden sm:inline">WhatsApp</span>
+              {/* Animated shine effect */}
+              <motion.div 
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                animate={{ x: ['-100%', '100%'] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+              
+              <MessageCircle className="h-4 w-4 relative z-10" />
+              <span className="hidden sm:inline relative z-10">WhatsApp</span>
             </motion.button>
             {user ? (
               <>
                 <motion.div 
-                  className="flex items-center space-x-2 text-sm px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20"
+                  className="flex items-center space-x-2 text-sm px-3 py-1.5 rounded-full bg-orange-100 dark:bg-orange-900/30 border border-orange-300 dark:border-orange-700"
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <User className="h-4 w-4 text-primary" />
-                  <span className="text-foreground">{profile?.username}</span>
+                  <User className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+                  <span className="text-slate-900 dark:text-white">{profile?.username}</span>
                 </motion.div>
                 {profile?.role === 'admin' && (
                   <motion.div
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <Button variant="outline" size="sm" asChild className="border-primary/30 hover:border-primary">
+                    <Button variant="outline" size="sm" asChild className="border-orange-300 dark:border-orange-700 text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/30">
                       <Link to="/admin">Admin</Link>
                     </Button>
                   </motion.div>
@@ -161,19 +215,24 @@ export function Navbar() {
                 </Button>
               </motion.div>
             </SheetTrigger>
-            <SheetContent side="right" className="w-64 bg-card border-border/50">
+            <SheetContent side="right" className="w-64 bg-white dark:bg-slate-900 border-orange-200 dark:border-slate-800">
               <div className="flex flex-col space-y-4 mt-8">
                 <motion.button
                   onClick={() => {
                     handleWhatsApp();
                     setOpen(false);
                   }}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white font-medium transition-all duration-300 w-full justify-center"
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-medium transition-all duration-300 w-full justify-center relative overflow-hidden group"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <MessageCircle className="h-4 w-4" />
-                  WhatsApp
+                  <motion.div 
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                    animate={{ x: ['-100%', '100%'] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                  <MessageCircle className="h-4 w-4 relative z-10" />
+                  <span className="relative z-10">WhatsApp</span>
                 </motion.button>
                 {navLinks.map((link, index) => (
                   <motion.div
@@ -185,23 +244,23 @@ export function Navbar() {
                     <Link
                       to={link.href}
                       onClick={() => setOpen(false)}
-                      className={`text-base font-medium transition-colors hover:text-primary block ${
-                        isActive(link.href) ? 'text-primary' : 'text-foreground/80'
+                      className={`text-base font-medium transition-colors hover:text-orange-600 dark:hover:text-orange-400 block ${
+                        isActive(link.href) ? 'text-orange-600 dark:text-orange-400' : 'text-slate-700 dark:text-slate-300'
                       }`}
                     >
                       {link.label}
                     </Link>
                   </motion.div>
                 ))}
-                <div className="border-t border-border pt-4">
+                <div className="border-t border-orange-200 dark:border-slate-800 pt-4">
                   {user ? (
                     <>
-                      <div className="flex items-center space-x-2 text-sm mb-4 px-3 py-2 rounded-lg bg-primary/10 border border-primary/20">
-                        <User className="h-4 w-4 text-primary" />
-                        <span>{profile?.username}</span>
+                      <div className="flex items-center space-x-2 text-sm mb-4 px-3 py-2 rounded-lg bg-orange-100 dark:bg-orange-900/30 border border-orange-300 dark:border-orange-700">
+                        <User className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+                        <span className="text-slate-900 dark:text-white">{profile?.username}</span>
                       </div>
                       {profile?.role === 'admin' && (
-                        <Button variant="outline" size="sm" className="w-full mb-2 border-primary/30" asChild>
+                        <Button variant="outline" size="sm" className="w-full mb-2 border-orange-300 dark:border-orange-700 text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/30" asChild>
                           <Link to="/admin" onClick={() => setOpen(false)}>Admin</Link>
                         </Button>
                       )}

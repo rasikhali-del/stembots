@@ -51,3 +51,15 @@ export interface CourseReview {
   created_at: string;
 }
 
+export interface Enrollment {
+  id: string;
+  course_id: string;
+  student_name: string;
+  email: string;
+  phone: string;
+  age: string;
+  guardian_name: string;
+  message: string | null;
+  created_at: string;
+}
+

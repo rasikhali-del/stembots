@@ -98,7 +98,15 @@ export default {
             },
             boxShadow: {
                 card: 'var(--shadow-card)',
-                hover: 'var(--shadow-hover)'
+                hover: 'var(--shadow-hover)',
+                glow: 'var(--shadow-glow)',
+                'glow-primary': '0 0 30px rgba(33, 150, 243, 0.4)',
+                'glow-secondary': '0 0 30px rgba(280, 85%, 65%, 0.4)',
+            },
+            backdropFilter: {
+                'glass': 'blur(12px)',
+                'glass-sm': 'blur(8px)',
+                'glass-lg': 'blur(16px)',
             },
             keyframes: {
                 'accordion-down': {
@@ -136,13 +144,43 @@ export default {
                         opacity: '1',
                         transform: 'translateX(0)'
                     }
+                },
+                'pulse-glow': {
+                    '0%, 100%': {
+                        boxShadow: '0 0 20px rgba(33, 150, 243, 0.4)'
+                    },
+                    '50%': {
+                        boxShadow: '0 0 40px rgba(33, 150, 243, 0.8)'
+                    }
+                },
+                'float': {
+                    '0%, 100%': {
+                        transform: 'translateY(0px)'
+                    },
+                    '50%': {
+                        transform: 'translateY(-10px)'
+                    }
+                },
+                'shimmer-pulse': {
+                    '0%': {
+                        opacity: '1'
+                    },
+                    '50%': {
+                        opacity: '0.7'
+                    },
+                    '100%': {
+                        opacity: '1'
+                    }
                 }
             },
             animation: {
                 'accordion-down': 'accordion-down 0.2s ease-out',
                 'accordion-up': 'accordion-up 0.2s ease-out',
                 'fade-in': 'fade-in 0.5s ease-out',
-                'slide-in': 'slide-in 0.5s ease-out'
+                'slide-in': 'slide-in 0.5s ease-out',
+                'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+                'float': 'float 3s ease-in-out infinite',
+                'shimmer-pulse': 'shimmer-pulse 2s ease-in-out infinite'
             }
         }
     },

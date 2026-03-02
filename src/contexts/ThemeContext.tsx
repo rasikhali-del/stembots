@@ -13,12 +13,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<ThemeMode>(() => {
     const savedTheme = localStorage.getItem('theme') as ThemeMode | null;
     if (savedTheme) return savedTheme;
-    
-    // Check system preference
+      // Check system preference
     if (typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       return 'dark';
     }
-    return 'dark'; // Default to dark
+    return 'light'; // Default to light
   });
 
   // Apply theme to document

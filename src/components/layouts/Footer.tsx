@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MessageCircle, Lock } from 'lucide-react';
+import { MessageCircle, Lock, Instagram, Linkedin, Phone } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export function Footer() {
@@ -71,7 +71,16 @@ export function Footer() {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-lg font-bold gradient-text mb-4">Stembots</h3>
+            <div className="text-lg font-bold mb-4 flex gap-0.5">
+              <motion.span className="text-pink-500" animate={{ y: [0, -2, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0 }}>S</motion.span>
+              <motion.span className="text-blue-900" animate={{ y: [0, -2, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0.1 }}>T</motion.span>
+              <motion.span className="text-teal-500" animate={{ y: [0, -2, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0.2 }}>E</motion.span>
+              <motion.span className="text-yellow-400" animate={{ y: [0, -2, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}>M</motion.span>
+              <motion.span className="text-blue-900" animate={{ y: [0, -2, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0.4 }}>B</motion.span>
+              <motion.span className="text-blue-900" animate={{ y: [0, -2, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}>O</motion.span>
+              <motion.span className="text-blue-900" animate={{ y: [0, -2, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0.6 }}>T</motion.span>
+              <motion.span className="text-blue-900" animate={{ y: [0, -2, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0.7 }}>S</motion.span>
+            </div>
             <p className="text-sm text-muted-foreground">
               Crafting future with code, robot and art. 
             </p>
@@ -101,8 +110,51 @@ export function Footer() {
           <div>
             <h4 className="text-sm font-semibold mb-4">Connect</h4>
             <p className="text-sm text-muted-foreground mb-4">
-              Follow us on Instagram: <a href="https://instagram.com/stem.bots" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">@stem.bots</a>
+              Follow us on social media
             </p>
+            
+            {/* Social Media Icons */}
+            <div className="flex items-center gap-3 mb-4">
+              {/* WhatsApp Icon */}
+              <motion.a
+                href="https://wa.me/03462641229"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-green-600 text-white flex items-center justify-center hover:shadow-lg hover:shadow-green-500/50 transition-all duration-300"
+                whileHover={{ scale: 1.1, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                title="Chat on WhatsApp"
+              >
+                <Phone className="h-5 w-5" />
+              </motion.a>
+
+              {/* Instagram Icon */}
+              <motion.a
+                href="https://instagram.com/stem.bots"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-400 via-purple-400 to-indigo-600 text-white flex items-center justify-center hover:shadow-lg hover:shadow-pink-500/50 transition-all duration-300"
+                whileHover={{ scale: 1.1, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                title="Follow on Instagram"
+              >
+                <Instagram className="h-5 w-5" />
+              </motion.a>
+
+              {/* LinkedIn Icon */}
+              <motion.a
+                href="https://linkedin.com/company/stembots"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-700 text-white flex items-center justify-center hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300"
+                whileHover={{ scale: 1.1, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                title="Connect on LinkedIn"
+              >
+                <Linkedin className="h-5 w-5" />
+              </motion.a>
+            </div>
+
             <motion.button
               onClick={handleWhatsApp}
               className="flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all duration-300 text-sm font-medium"

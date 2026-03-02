@@ -134,6 +134,40 @@ INSERT INTO public.homepage_content (section_id, content) VALUES
 ('about_mission', 'At Stembots, we believe every child has the potential to become a future innovator. Our mission is to inspire and educate young minds through engaging STEM programs that combine creativity, critical thinking, and hands-on learning.'),
 ('about_vision', 'We envision a world where every child has access to quality STEM education, empowering them to solve real-world problems and shape the future of technology.');
 
+-- 16. CREATE ENROLLMENTS TABLE
+CREATE TABLE IF NOT EXISTS public.enrollments (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  course_id UUID NOT NULL REFERENCES public.courses(id) ON DELETE CASCADE,
+  student_name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  age TEXT NOT NULL,
+  guardian_name TEXT NOT NULL DEFAULT '',
+  message TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.enrollments ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Anyone can create enrollments" ON public.enrollments
+  FOR INSERT TO anon, authenticated WITH CHECK (true);
+
+CREATE POLICY "Admins can view enrollments" ON public.enrollments
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM public.profiles
+      WHERE profiles.id = auth.uid() AND profiles.role = 'admin'
+    )
+  );
+
+CREATE POLICY "Admins can delete enrollments" ON public.enrollments
+  FOR DELETE USING (
+    EXISTS (
+      SELECT 1 FROM public.profiles
+      WHERE profiles.id = auth.uid() AND profiles.role = 'admin'
+    )
+  );
+
 -- DONE! ✅
 -- Ab sab tables create ho gaye!
 -- Database setup complete!

@@ -1,5 +1,5 @@
 import { supabase } from './supabase';
-import type { Course, ContactMessage, HomepageContent, Profile, CourseReview } from '@/types';
+import type { Course, ContactMessage, HomepageContent, Profile, CourseReview, Enrollment } from '@/types';
 
 // Courses API
 export const coursesApi = {
@@ -11,6 +11,17 @@ export const coursesApi = {
     
     if (error) throw error;
     return Array.isArray(data) ? data : [];
+  },
+
+  getById: async (id: string): Promise<Course | null> => {
+    const { data, error } = await supabase
+      .from('courses')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle();
+    
+    if (error) throw error;
+    return data;
   },
 
   getByCategory: async (category: string): Promise<Course[]> => {
@@ -199,6 +210,47 @@ export const reviewsApi = {
   delete: async (id: string): Promise<void> => {
     const { error } = await supabase
       .from('course_reviews')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  }
+};
+
+// Enrollments API
+export const enrollmentsApi = {
+  create: async (enrollment: Omit<Enrollment, 'id' | 'created_at'>): Promise<void> => {
+    const { error } = await supabase
+      .from('enrollments')
+      .insert([enrollment]);
+    
+    if (error) throw error;
+  },
+
+  getByCourse: async (courseId: string): Promise<Enrollment[]> => {
+    const { data, error } = await supabase
+      .from('enrollments')
+      .select('*')
+      .eq('course_id', courseId)
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    return Array.isArray(data) ? data : [];
+  },
+
+  getAll: async (): Promise<Enrollment[]> => {
+    const { data, error } = await supabase
+      .from('enrollments')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    return Array.isArray(data) ? data : [];
+  },
+
+  delete: async (id: string): Promise<void> => {
+    const { error } = await supabase
+      .from('enrollments')
       .delete()
       .eq('id', id);
     

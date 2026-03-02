@@ -1,5 +1,6 @@
 import HomePage from './pages/HomePage';
 import CoursesPage from './pages/CoursesPage';
+import CourseDetailPage from './pages/CourseDetailPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import AdminLoginPage from './pages/AdminLoginPage';
@@ -24,6 +25,12 @@ const routes: RouteConfig[] = [
     name: 'Courses',
     path: '/courses',
     element: <CoursesPage />
+  },
+  {
+    name: 'Course Detail',
+    path: '/courses/:id',
+    element: <CourseDetailPage />,
+    visible: false
   },
   {
     name: 'About',
