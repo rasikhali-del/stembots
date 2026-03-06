@@ -1,0 +1,259 @@
+import { supabase } from './supabase';
+import type { Course, ContactMessage, HomepageContent, Profile, CourseReview, Enrollment } from '@/types';
+
+// Courses API
+export const coursesApi = {
+  getAll: async (): Promise<Course[]> => {
+    const { data, error } = await supabase
+      .from('courses')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    return Array.isArray(data) ? data : [];
+  },
+
+  getById: async (id: string): Promise<Course | null> => {
+    const { data, error } = await supabase
+      .from('courses')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  getByCategory: async (category: string): Promise<Course[]> => {
+    const { data, error } = await supabase
+      .from('courses')
+      .select('*')
+      .eq('category', category)
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    return Array.isArray(data) ? data : [];
+  },
+
+  update: async (id: string, updates: Partial<Course>): Promise<void> => {
+    const { error } = await supabase
+      .from('courses')
+      .update({ ...updates, updated_at: new Date().toISOString() })
+      .eq('id', id);
+    
+    if (error) throw error;
+  },
+
+  create: async (course: Omit<Course, 'id' | 'created_at' | 'updated_at'>): Promise<void> => {
+    const { error } = await supabase
+      .from('courses')
+      .insert([course]);
+    
+    if (error) throw error;
+  },
+
+  delete: async (id: string): Promise<void> => {
+    const { error } = await supabase
+      .from('courses')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  }
+};
+
+// Contact Messages API
+export const contactApi = {
+  create: async (message: Omit<ContactMessage, 'id' | 'created_at'>): Promise<void> => {
+    const { error } = await supabase
+      .from('contact_messages')
+      .insert([message]);
+    
+    if (error) throw error;
+  },
+
+  getAll: async (): Promise<ContactMessage[]> => {
+    const { data, error } = await supabase
+      .from('contact_messages')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    return Array.isArray(data) ? data : [];
+  },
+
+  delete: async (id: string): Promise<void> => {
+    const { error } = await supabase
+      .from('contact_messages')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  }
+};
+
+// Homepage Content API
+export const homepageApi = {
+  getAll: async (): Promise<HomepageContent[]> => {
+    const { data, error } = await supabase
+      .from('homepage_content')
+      .select('*');
+    
+    if (error) throw error;
+    return Array.isArray(data) ? data : [];
+  },
+
+  getBySection: async (sectionId: string): Promise<HomepageContent | null> => {
+    const { data, error } = await supabase
+      .from('homepage_content')
+      .select('*')
+      .eq('section_id', sectionId)
+      .maybeSingle();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  update: async (sectionId: string, content: string): Promise<void> => {
+    const { error } = await supabase
+      .from('homepage_content')
+      .update({ content, updated_at: new Date().toISOString() })
+      .eq('section_id', sectionId);
+    
+    if (error) throw error;
+  }
+};
+
+// Profiles API
+export const profilesApi = {
+  getCurrent: async (): Promise<Profile | null> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return null;
+
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .maybeSingle();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  getAll: async (): Promise<Profile[]> => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    return Array.isArray(data) ? data : [];
+  },
+
+  updateRole: async (id: string, role: 'user' | 'admin'): Promise<void> => {
+    const { error } = await supabase
+      .from('profiles')
+      .update({ role, updated_at: new Date().toISOString() })
+      .eq('id', id);
+    
+    if (error) throw error;
+  }
+};
+
+// Email Service API
+export const emailApi = {
+  sendContactNotification: async (name: string, email: string, message: string, phone?: string): Promise<void> => {
+    try {
+      // Call Supabase function or external email service
+      const { error } = await supabase.functions.invoke('send-contact-email', {
+        body: {
+          name,
+          email,
+          message,
+          phone,
+          timestamp: new Date().toISOString()
+        }
+      });
+      
+      if (error) {
+        console.error('Failed to send email notification:', error);
+        // Don't throw - email is optional, contact form should still work
+      }
+    } catch (err) {
+      console.error('Email service error:', err);
+      // Silently fail - contact form should still work without email
+    }
+  }
+};
+
+// Course Reviews API
+export const reviewsApi = {
+  getByCourse: async (courseId: string): Promise<CourseReview[]> => {
+    const { data, error } = await supabase
+      .from('course_reviews')
+      .select('*')
+      .eq('course_id', courseId)
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    return Array.isArray(data) ? data : [];
+  },
+
+  create: async (review: Omit<CourseReview, 'id' | 'created_at'>): Promise<void> => {
+    const { error } = await supabase
+      .from('course_reviews')
+      .insert([review]);
+    
+    if (error) throw error;
+  },
+
+  delete: async (id: string): Promise<void> => {
+    const { error } = await supabase
+      .from('course_reviews')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  }
+};
+
+// Enrollments API
+export const enrollmentsApi = {
+  create: async (enrollment: Omit<Enrollment, 'id' | 'created_at'>): Promise<void> => {
+    const { error } = await supabase
+      .from('enrollments')
+      .insert([enrollment]);
+    
+    if (error) throw error;
+  },
+
+  getByCourse: async (courseId: string): Promise<Enrollment[]> => {
+    const { data, error } = await supabase
+      .from('enrollments')
+      .select('*')
+      .eq('course_id', courseId)
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    return Array.isArray(data) ? data : [];
+  },
+
+  getAll: async (): Promise<Enrollment[]> => {
+    const { data, error } = await supabase
+      .from('enrollments')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    return Array.isArray(data) ? data : [];
+  },
+
+  delete: async (id: string): Promise<void> => {
+    const { error } = await supabase
+      .from('enrollments')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  }
+};

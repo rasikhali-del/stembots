@@ -1,0 +1,65 @@
+import HomePage from './pages/HomePage';
+import CoursesPage from './pages/CoursesPage';
+import CourseDetailPage from './pages/CourseDetailPage';
+import AboutPage from './pages/AboutPage';
+import ContactPage from './pages/ContactPage';
+import AdminLoginPage from './pages/AdminLoginPage';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminCoursesPage from './pages/AdminCoursesPage';
+import type { ReactNode } from 'react';
+
+interface RouteConfig {
+  name: string;
+  path: string;
+  element: ReactNode;
+  visible?: boolean;
+}
+
+const routes: RouteConfig[] = [
+  {
+    name: 'Home',
+    path: '/',
+    element: <HomePage />
+  },
+  {
+    name: 'Courses',
+    path: '/courses',
+    element: <CoursesPage />
+  },
+  {
+    name: 'Course Detail',
+    path: '/courses/:id',
+    element: <CourseDetailPage />,
+    visible: false
+  },
+  {
+    name: 'About',
+    path: '/about',
+    element: <AboutPage />
+  },
+  {
+    name: 'Contact',
+    path: '/contact',
+    element: <ContactPage />
+  },
+  {
+    name: 'Admin Login',
+    path: '/admin-login',
+    element: <AdminLoginPage />,
+    visible: false
+  },
+  {
+    name: 'Admin Dashboard',
+    path: '/admin',
+    element: <AdminDashboard />,
+    visible: false
+  },
+  {
+    name: 'Admin Courses',
+    path: '/admin/courses',
+    element: <AdminCoursesPage />,
+    visible: false
+  }
+];
+
+export default routes;
