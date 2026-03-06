@@ -97,9 +97,7 @@ export default function AdminLoginPage() {
                       className="bg-muted/50 border-border/50 focus:border-primary"
                       required
                     />
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Default: admin@stembots.com
-                    </p>
+                   
                   </motion.div>
 
                   {/* Password Field */}
@@ -120,24 +118,10 @@ export default function AdminLoginPage() {
                       className="bg-muted/50 border-border/50 focus:border-primary"
                       required
                     />
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Default: Stembots@2026
-                    </p>
+                    
                   </motion.div>
 
-                  {/* Info Box */}
-                  <motion.div
-                    className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.4 }}
-                  >
-                    <p className="text-xs text-amber-700 dark:text-amber-400">
-                      <strong>Demo Credentials:</strong><br />
-                      Email: admin@stembots.com<br />
-                      Password: Stembots@2026
-                    </p>
-                  </motion.div>
+                 
 
                   {/* Login Button */}
                   <motion.div

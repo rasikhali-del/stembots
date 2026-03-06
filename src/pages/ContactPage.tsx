@@ -274,8 +274,8 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold mb-1 text-foreground">WhatsApp</h3>
-                      <a href="https://wa.me/03462641229" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors duration-200">
-                        +92 346 264 1229
+                      <a href="https://wa.me/+92 320 0221188" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors duration-200">
+                        +92 320 0221188
                       </a>
                     </div>
                   </motion.div>
